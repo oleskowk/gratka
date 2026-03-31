@@ -8,8 +8,8 @@ services:
         exclude:
             - '../src/Kernel.php'
 
-    App\Domain\Port\PhotoReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoReadRepository'
+    App\Domain\Port\PhotoReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoRepository'
     App\Domain\Port\LikeReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineLikeReadRepository'
     App\Domain\Port\UserReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineUserReadRepository'
-    App\Domain\Port\PhotoFindRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoFindRepository'
+    App\Domain\Port\PhotoFindRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoRepository'
     App\Domain\Port\LikeCommandRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineLikeCommandRepository'

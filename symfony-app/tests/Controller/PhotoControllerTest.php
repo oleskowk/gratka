@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\AuthToken;
-use App\Entity\Photo;
-use App\Entity\User;
+use App\Domain\Model\AuthToken;
+use App\Domain\Model\Photo;
+use App\Domain\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -137,7 +137,7 @@ class PhotoControllerTest extends WebTestCase
     private function authenticateAs(User $user): void
     {
         $tokenValue = 'test-token-' . uniqid();
-        $token = new \App\Entity\AuthToken();
+        $token = new AuthToken();
         $token->setToken($tokenValue)->setUser($user);
 
         $this->entityManager->persist($token);

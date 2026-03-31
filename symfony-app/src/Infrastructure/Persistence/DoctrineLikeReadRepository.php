@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence;
 
 use App\Domain\Port\LikeReadRepositoryInterface;
-use App\Likes\Like;
+use App\Domain\Model\Like;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineLikeReadRepository implements LikeReadRepositoryInterface

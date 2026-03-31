@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Query;
 
-use App\Entity\User;
+use App\Domain\Model\User;
 
 /**
  * Read-model DTO returned by GetHomepageQueryHandler.

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence;
 
 use App\Domain\Port\UserReadRepositoryInterface;
-use App\Entity\User;
+use App\Domain\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineUserReadRepository implements UserReadRepositoryInterface

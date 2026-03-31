@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence;
 
+use App\Domain\Model\Photo;
+use App\Domain\Port\PhotoFindRepositoryInterface;
 use App\Domain\Port\PhotoReadRepositoryInterface;
-use App\Entity\Photo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-final class DoctrinePhotoReadRepository extends ServiceEntityRepository implements PhotoReadRepositoryInterface
+final class DoctrinePhotoRepository extends ServiceEntityRepository implements PhotoReadRepositoryInterface, PhotoFindRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Photo::class);
+    }
+
+    public function findById(int $id): ?Photo
+    {
+        return $this->find($id);
     }
 
     /**

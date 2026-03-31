@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence;
 
 use App\Domain\Port\LikeCommandRepositoryInterface;
-use App\Entity\Photo;
-use App\Entity\User;
-use App\Likes\Like;
+use App\Domain\Model\Photo;
+use App\Domain\Model\User;
+use App\Domain\Model\Like;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineLikeCommandRepository implements LikeCommandRepositoryInterface

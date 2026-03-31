@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Port;
 
-use App\Entity\User;
+use App\Domain\Model\User;
 
 interface UserReadRepositoryInterface
 {

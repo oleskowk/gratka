@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -114,9 +114,6 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection<int, Photo>
-     */
     public function getPhotos(): Collection
     {
         return $this->photos;
