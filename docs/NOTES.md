@@ -5,3 +5,4 @@ Zaczynam od aplikacji symfony zgodnie z instrukcjami.
 - Produkcyjny obraz instaluje deweloperskie zależności i nie optymaloizuje autoloadera - poprawiam.
 - Tworzę nową warstwę "base" w dockerfile, by uniknąć rozjazdu środowisk, oraz przyspieszyć budowanie obrazów.
 - Dodaję plik Makefile, by ułatwić uruchamianie aplikacji.
+- Ekstrahuje konfigurację do zmiennych środowiskowych i dodaję plik .env.dist

@@ -3,25 +3,25 @@ services:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: phoenix_api
+      POSTGRES_USER: ${PHOENIX_DB_USER}
+      POSTGRES_PASSWORD: ${PHOENIX_DB_PASSWORD}
+      POSTGRES_DB: ${PHOENIX_DB_NAME}
     volumes:
       - phoenix-db-data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "${PHOENIX_DB_PORT}:5432"
 
   symfony-db:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: symfony_app
+      POSTGRES_USER: ${SYMFONY_DB_USER}
+      POSTGRES_PASSWORD: ${SYMFONY_DB_PASSWORD}
+      POSTGRES_DB: ${SYMFONY_DB_NAME}
     volumes:
       - symfony-db-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${SYMFONY_DB_PORT}:5432"
 
   phoenix:
     build:
@@ -31,12 +31,12 @@ services:
     depends_on:
       - phoenix-db
     environment:
-      DATABASE_URL: ecto://postgres:postgres@phoenix-db/phoenix_api
-      SECRET_KEY_BASE: ${PHOENIX_SECRET_KEY_BASE:-thisisasecret111}
-      PHX_HOST: 0.0.0.0
-      PORT: 4000
+      DATABASE_URL: ecto://${PHOENIX_DB_USER}:${PHOENIX_DB_PASSWORD}@phoenix-db/${PHOENIX_DB_NAME}
+      SECRET_KEY_BASE: ${PHOENIX_SECRET_KEY_BASE}
+      PHX_HOST: ${PHOENIX_HOST}
+      PORT: ${PHOENIX_PORT}
     ports:
-      - "4000:4000"
+      - "${PHOENIX_PORT}:${PHOENIX_PORT}"
     volumes:
       - ./phoenix-api:/app
 
@@ -49,12 +49,12 @@ services:
       - symfony-db
       - phoenix
     environment:
-      APP_ENV: dev
-      APP_SECRET: ${SYMFONY_APP_SECRET:-thisisasecret222}
-      PHOENIX_BASE_URL: http://phoenix:4000
-      DATABASE_URL: postgres://postgres:postgres@symfony-db:5432/symfony_app
+      APP_ENV: ${SYMFONY_APP_ENV}
+      APP_SECRET: ${SYMFONY_APP_SECRET}
+      PHOENIX_BASE_URL: ${SYMFONY_PHOENIX_BASE_URL}
+      DATABASE_URL: postgres://${SYMFONY_DB_USER}:${SYMFONY_DB_PASSWORD}@symfony-db:5432/${SYMFONY_DB_NAME}
     ports:
-      - "8000:8000"
+      - "${SYMFONY_PORT}:${SYMFONY_PORT}"
     volumes:
       - ./symfony-app:/app
 

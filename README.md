@@ -11,15 +11,23 @@ Ten projekt składa się z dwóch oddzielnych aplikacji z własnymi bazami danyc
   - Nazwa bazy danych: `phoenix_api`
 
 ## Szybki start
-```bash
-docker-compose up -d
 
-docker-compose exec symfony php bin/console app:seed
+1. Skonfiguruj środowisko (skopiuj szablon, jeśli jeszcze go nie masz):
+   ```bash
+   cp .env.dist .env
+   ```
 
-# Konfiguracja bazy danych Phoenix
-docker-compose exec phoenix mix ecto.migrate
-docker-compose exec phoenix mix run priv/repo/seeds.exs
-```
+2. Uruchom kontenery i zainicjuj bazy danych:
+   ```bash
+   docker-compose up -d
+
+   # Konfiguracja Symfony
+   docker-compose exec symfony php bin/console app:seed
+
+   # Konfiguracja Phoenix
+   docker-compose exec phoenix mix ecto.migrate
+   docker-compose exec phoenix mix run priv/repo/seeds.exs
+   ```
 
 Dostęp do aplikacji:
 - Symfony App: http://localhost:8000
