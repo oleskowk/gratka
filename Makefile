@@ -9,7 +9,7 @@ down:
 	docker compose down
 
 seed:
-	docker compose exec symfony php bin/console app:seed-database
+	docker compose exec symfony php bin/console app:seed
 
 shell-symfony:
 	docker compose exec symfony bash
