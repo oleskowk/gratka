@@ -1,0 +1,1 @@
+Zaczynam od dodania globalnego AGENTS.md który będzie zawierał ogólne zasady dla AI agentów pracujących nad projektem.
