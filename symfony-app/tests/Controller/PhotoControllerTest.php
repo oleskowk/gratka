@@ -7,7 +7,6 @@ namespace App\Tests\Controller;
 use App\Entity\AuthToken;
 use App\Entity\Photo;
 use App\Entity\User;
-use App\Likes\LikeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;

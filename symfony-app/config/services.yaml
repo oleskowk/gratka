@@ -11,3 +11,5 @@ services:
     App\Domain\Port\PhotoReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoReadRepository'
     App\Domain\Port\LikeReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineLikeReadRepository'
     App\Domain\Port\UserReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineUserReadRepository'
+    App\Domain\Port\PhotoFindRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoFindRepository'
+    App\Domain\Port\LikeCommandRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineLikeCommandRepository'
