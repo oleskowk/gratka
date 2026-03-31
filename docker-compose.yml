@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   phoenix-db:
     image: postgres:15
@@ -26,7 +24,7 @@ services:
       - "5432:5432"
 
   phoenix:
-    build: 
+    build:
       context: ./phoenix-api
       dockerfile: Dockerfile
       target: dev

@@ -14,8 +14,6 @@ Ten projekt składa się z dwóch oddzielnych aplikacji z własnymi bazami danyc
 ```bash
 docker-compose up -d
 
-# Konfiguracja bazy danych Symfony
-docker-compose exec symfony php bin/console doctrine:migrations:migrate --no-interaction
 docker-compose exec symfony php bin/console app:seed
 
 # Konfiguracja bazy danych Phoenix
@@ -53,7 +51,9 @@ docker-compose restart symfony
 
 ### Uruchamianie testów
 ```bash
-docker-compose exec symfony php bin/phpunit
+docker-compose exec symfony php vendor/bin/phpunit
+# Lub przez make:
+make tests-symfony
 ```
 
 ## Komendy Phoenix
@@ -81,5 +81,19 @@ docker-compose restart phoenix
 
 ### Uruchamianie testów
 ```bash
-docker-compose exec phoenix mix test
+docker-compose exec phoenix env MIX_ENV=test DB_HOST=phoenix-db mix test
+# Lub przez make:
+make tests-phoenix
+```
+
+## 📦 Git & Commits
+
+- **Atomic Commits**: Twórz małe, odizolowane commity skupione na jednej, konkretnej zmianie.
+- **Descriptive Messages**: Używaj jasnych, opisowych wiadomości commitów w języku angielskim (np. "Fix: Resolve N+1 query in PhotoRepository").
+
+## 🧪 Wszystkie testy
+
+Możesz uruchomić testy dla obu aplikacji jednocześnie za pomocą:
+```bash
+make tests
 ```
