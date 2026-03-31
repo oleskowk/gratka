@@ -24,4 +24,4 @@ php bin/console cache:clear
 echo "Running migrations..."
 php bin/console doctrine:migrations:migrate --no-interaction
 
-exec php -S 0.0.0.0:8000 -t public public/index.php
+exec "$@"

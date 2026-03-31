@@ -14,6 +14,7 @@ FROM base as dev
 COPY ./entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public", "public/index.php"]
 
 FROM base as prod
 
