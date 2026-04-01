@@ -25,8 +25,9 @@ class ProfileController extends AbstractController
     {
         $session = $request->getSession();
         $userId = $session->get('user_id');
-        if (!is_scalar($userId)) {
+        if (! is_scalar($userId)) {
             $this->logger->info('Redirecting to home: no user_id in session or invalid');
+
             return $this->redirectToRoute('home');
         }
 

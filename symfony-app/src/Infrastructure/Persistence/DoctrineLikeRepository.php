@@ -24,11 +24,11 @@ final class DoctrineLikeRepository implements LikeRepositoryInterface
         $user = $this->entityManager->getReference(User::class, $userId);
         $photo = $this->entityManager->getReference(Photo::class, $photoId);
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new UserNotFoundException();
         }
 
-        if (!$photo instanceof Photo) {
+        if (! $photo instanceof Photo) {
             throw new PhotoNotFoundException();
         }
 

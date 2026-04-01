@@ -7,6 +7,8 @@ namespace App\Tests\Controller;
 use App\Domain\Model\AuthToken;
 use App\Domain\Model\Photo;
 use App\Domain\Model\User;
+use App\Infrastructure\ExternalApi\Dto\PhoenixPhotoDto;
+use App\Infrastructure\ExternalApi\Mock\PhoenixApiMock;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -148,5 +150,61 @@ class PhotoControllerTest extends WebTestCase
             'token' => $tokenValue,
         ]);
         $this->client->followRedirect();
+    }
+
+    #[Test]
+    public function itSuccessfullyUpdatesPhoenixApiToken(): void
+    {
+        // GIVEN
+        $user = $this->createPersistedUser('token_user');
+        $this->authenticateAs($user);
+
+        // WHEN
+        $this->client->request('POST', '/profile/token/update', [
+            'token' => 'new-phoenix-token-123',
+        ]);
+
+        // THEN
+        $this->assertResponseRedirects('/profile');
+        $this->client->followRedirect();
+        $this->assertStringContainsString('Phoenix API token updated successfully!', $this->client->getResponse()->getContent());
+
+        // Refresh user from DB
+        $this->entityManager->clear();
+        $user = $this->entityManager->find(User::class, $user->getId());
+        $this->assertSame('new-phoenix-token-123', $user->getPhoenixApiToken());
+    }
+
+    #[Test]
+    public function itImportsPhotosSuccessfullyViaController(): void
+    {
+        // GIVEN
+        $user = $this->createPersistedUser('import_user');
+        $this->authenticateAs($user);
+
+        // Update token via endpoint (not direct DB access)
+        $this->client->request('POST', '/profile/token/update', ['token' => 'mock-api-token']);
+        $this->client->followRedirect();
+
+        // Mock the Phoenix API response via our test mock service
+        /** @var PhoenixApiMock $mockClient */
+        $mockClient = static::getContainer()->get(PhoenixApiMock::class);
+        $mockClient->setPhotos([
+            new PhoenixPhotoDto('ext-new-functional-1', 'https://example.com/functional1.jpg'),
+        ]);
+
+        // WHEN
+        $this->client->request('POST', '/photos/import');
+
+        // THEN
+        $this->assertResponseRedirects('/profile');
+        $this->client->followRedirect();
+        $this->assertStringContainsString('Photos imported successfully!', $this->client->getResponse()->getContent());
+
+        // Verify photo exists in DB
+        $photoRepository = $this->entityManager->getRepository(Photo::class);
+        $photo = $photoRepository->findOneBy(['externalId' => 'ext-new-functional-1']);
+        $this->assertNotNull($photo, 'Photo should be saved in DB with correct externalId');
+        $this->assertSame('https://example.com/functional1.jpg', $photo->getImageUrl());
     }
 }

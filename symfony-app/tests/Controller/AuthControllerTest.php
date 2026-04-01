@@ -122,7 +122,7 @@ class AuthControllerTest extends WebTestCase
     {
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('.profile-menu', 'User should see profile menu when logged in.');
+        $this->assertSelectorExists('a[href="/profile"]', 'User should see profile link when logged in.');
         $this->assertSelectorExists('a[href="/logout"]', 'User should see logout link when logged in.');
     }
 
@@ -130,7 +130,7 @@ class AuthControllerTest extends WebTestCase
     {
         $this->client->request('GET', '/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorNotExists('.profile-menu', 'User should NOT see profile menu when anonymous.');
+        $this->assertSelectorNotExists('a[href="/profile"]', 'User should NOT see profile link when anonymous.');
         $this->assertSelectorNotExists('a[href="/logout"]', 'User should NOT see logout link when anonymous.');
     }
 }

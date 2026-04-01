@@ -9,4 +9,6 @@ use App\Domain\Model\Photo;
 interface PhotoFindRepositoryInterface
 {
     public function findById(int $id): ?Photo;
+
+    public function findByExternalId(string $externalId, string $source): ?Photo;
 }

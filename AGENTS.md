@@ -29,6 +29,7 @@ This document serves as a set of rules and best practices for AI agents working 
 ## 🔤 Language & Coding Standards
 
 - **Code & Comments**: All code (variable names, class names, functions, etc.) and comments MUST be in **English**.
+- **PHP Coding Standards**: ALWAYS use `use` statements at the top of the file for all external class references. Within the code (instantiations, typehints, PHPDocs), ALWAYS use short class names. Inline Fully Qualified Names (FQN) should be avoided within the class body.
 - **Documentation**: Technical documentation within the code must be in English. General READMEs or user-facing docs can follow the user's preference (Polish/English), but English is the default for technical internals.
 
 
@@ -60,5 +61,5 @@ When implementing changes:
 ## 🚀 Performance & Security
 
 - **Database Optimization**: Avoid N+1 queries. Use Ecto's `preload` or Doctrine's `JOIN FETCH` when fetching related data.
-- **Sensitive Data**: Never hardcode secrets. Use environment variables defined in `.env` or `docker-compose.yml`.
+- **Sensitive Data**: Never hardcode secrets. Use environment variables defined in `.env` or `docker-compose.yml`. Always add new environment variables placeholders to `.env.dist`.
 - **Validation**: Always validate input at the edges of the system (API controllers, CLI input).

@@ -37,6 +37,12 @@ class Photo
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $externalId = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $source = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -122,6 +128,30 @@ class Photo
     public function setLikeCounter(int $likeCounter): self
     {
         $this->likeCounter = $likeCounter;
+
+        return $this;
+    }
+
+    public function getExternalId(): ?string
+    {
+        return $this->externalId;
+    }
+
+    public function setExternalId(?string $externalId): self
+    {
+        $this->externalId = $externalId;
+
+        return $this;
+    }
+
+    public function getSource(): ?string
+    {
+        return $this->source;
+    }
+
+    public function setSource(?string $source): self
+    {
+        $this->source = $source;
 
         return $this;
     }

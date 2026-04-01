@@ -145,6 +145,115 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+        .integration-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .integration-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .integration-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .token-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .token-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .token-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .save-token-btn {
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .save-token-btn:hover {
+            background: #5a6fd1;
+        }
+
+        .import-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .import-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(17, 153, 142, 0.3);
+            text-decoration: none;
+        }
+
+        .import-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(17, 153, 142, 0.4);
+        }
+
+        .import-btn:disabled {
+            background: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .integration-status {
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.8em;
+        }
+
+        .status-active {
+            background: #e6fffa;
+            color: #2c7a7b;
+        }
+
+        .status-missing {
+            background: #fff5f5;
+            color: #c53030;
+        }
     </style>
 {% endblock %}
 
@@ -176,18 +285,6 @@
                     <div class="profile-field-value">{{ user.age }} years old</div>
                 </div>
             {% endif %}
-            
-            {% if user.name %}
-                <div class="profile-field">
-                    <div class="profile-field-label">Full Name</div>
-                    <div class="profile-field-value">
-                        {{ user.name }}
-                        {% if user.lastName %}
-                            {{ user.lastName }}
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
         </div>
         
         {% if user.bio %}
@@ -203,8 +300,40 @@
                 <div class="stat-label">Photos</div>
             </div>
         </div>
+
+        <div class="integration-section">
+            <h2 class="integration-title">🔌 Phoenix API Integration</h2>
+            
+            <div class="integration-card">
+                <div class="integration-status">
+                    Status: 
+                    {% if user.phoenixApiToken %}
+                        <span class="status-badge status-active">✅ Connected</span>
+                    {% else %}
+                        <span class="status-badge status-missing">❌ Not Configured</span>
+                    {% endif %}
+                </div>
+
+                <form action="{{ path('profile_token_update') }}" method="POST" class="token-form">
+                    <input type="text" name="token" class="token-input" 
+                           placeholder="Enter Phoenix Access Token" 
+                           value="{{ user.phoenixApiToken ? '********' : '' }}" required>
+                    <button type="submit" class="save-token-btn">Save Token</button>
+                </form>
+
+                <p style="font-size: 0.85em; color: #666; text-align: center;">
+                    Saving the token allows you to import photos anytime with one click.
+                </p>
+
+                {% if user.phoenixApiToken %}
+                    <form action="{{ path('photos_import') }}" method="POST" style="text-align: center; margin-top: 20px;">
+                        <button type="submit" class="import-btn">🚀 Import Photos Now</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
         
-        <div style="text-align: center;">
+        <div style="text-align: center; margin-top: 40px;">
             <a href="{{ path('home') }}" class="back-button">← Back to Gallery</a>
         </div>
     </div>

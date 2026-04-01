@@ -19,4 +19,9 @@ final class DoctrineAuthTokenReadRepository implements AuthTokenReadRepositoryIn
     {
         return $this->entityManager->getRepository(AuthToken::class)->findOneBy(['token' => $token]);
     }
+
+    public function findForUser(int $userId): ?AuthToken
+    {
+        return $this->entityManager->getRepository(AuthToken::class)->findOneBy(['user' => $userId], ['createdAt' => 'DESC']);
+    }
 }

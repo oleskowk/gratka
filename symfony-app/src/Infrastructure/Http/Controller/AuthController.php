@@ -31,11 +31,12 @@ class AuthController extends AbstractController
     #[Route('/auth/login', name: 'auth_login', methods: ['POST'])]
     public function login(Request $request): Response
     {
-        $username = $request->request->get('username');
-        $token = $request->request->get('token');
+        $username = (string) $request->request->get('username', '');
+        $token = (string) $request->request->get('token', '');
 
-        if (!$username || !$token) {
+        if ('' === $username || '' === $token) {
             $this->addFlash('error', 'Please provide both username and token.');
+
             return $this->redirectToRoute('login');
         }
 
@@ -60,6 +61,7 @@ class AuthController extends AbstractController
             ]);
 
             $this->addFlash('error', $e->getMessage());
+
             return $this->redirectToRoute('login');
         }
     }

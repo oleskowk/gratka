@@ -1,6 +1,9 @@
 services:
-    App\Infrastructure\Http\PhoenixClient:
-        synthetic: true
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Infrastructure\ExternalApi\Mock\PhoenixApiMock:
         public: true
 
-    App\Domain\Port\PhoenixClientInterface: '@App\Infrastructure\Http\PhoenixClient'
+    App\Domain\Port\PhoenixApiClientInterface: '@App\Infrastructure\ExternalApi\Mock\PhoenixApiMock'

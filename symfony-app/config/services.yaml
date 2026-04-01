@@ -7,9 +7,22 @@ services:
         resource: '../src/'
         exclude:
             - '../src/Kernel.php'
+            - '../src/Application/Command/*Command.php'
+            - '../src/Application/Exception/'
+            - '../src/Domain/Model/'
+            - '../src/Domain/Exception/'
+            - '../src/Infrastructure/ExternalApi/Dto/'
+            - '../src/Infrastructure/ExternalApi/Exception/'
 
     App\Domain\Port\PhotoReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoRepository'
     App\Domain\Port\LikeRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineLikeRepository'
-    App\Domain\Port\UserReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineUserReadRepository'
+    App\Domain\Port\UserReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineUserRepository'
+    App\Domain\Port\UserSaveRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineUserRepository'
     App\Domain\Port\PhotoFindRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoRepository'
+    App\Domain\Port\PhotoSaveRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoRepository'
     App\Domain\Port\AuthTokenReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineAuthTokenReadRepository'
+    App\Domain\Port\PhoenixApiClientInterface: '@App\Infrastructure\ExternalApi\PhoenixApiClient'
+
+    App\Infrastructure\ExternalApi\PhoenixApiClient:
+        arguments:
+            $phoenixBaseUrl: '%env(PHOENIX_BASE_URL)%'

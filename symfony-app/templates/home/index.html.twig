@@ -149,10 +149,57 @@
             font-size: 2em;
             margin-bottom: 10px;
         }
+        .welcome-banner {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .welcome-text h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .welcome-text p {
+            opacity: 0.8;
+        }
+
+        .btn-profile {
+            background: white;
+            color: #6366f1;
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-profile:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            background: #f8f9fa;
+        }
     </style>
 {% endblock %}
 
 {% block body %}
+    {% if currentUser %}
+        <div class="welcome-banner">
+            <div class="welcome-text">
+                <h2>Welcome back, {{ currentUser.name|default(currentUser.username) }}! 👋</h2>
+                <p>You have shared {{ currentUser.photos|length }} photos so far.</p>
+            </div>
+            <a href="{{ path('profile') }}" class="btn-profile">View My Profile</a>
+        </div>
+    {% endif %}
     {% if photos|length > 0 %}
         <div class="photo-grid">
             {% for photo in photos %}

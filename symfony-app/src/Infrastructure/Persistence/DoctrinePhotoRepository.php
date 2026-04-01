@@ -7,11 +7,12 @@ namespace App\Infrastructure\Persistence;
 use App\Domain\Model\Photo;
 use App\Domain\Port\PhotoFindRepositoryInterface;
 use App\Domain\Port\PhotoReadRepositoryInterface;
+use App\Domain\Port\PhotoSaveRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /** @extends ServiceEntityRepository<Photo> */
-final class DoctrinePhotoRepository extends ServiceEntityRepository implements PhotoReadRepositoryInterface, PhotoFindRepositoryInterface
+final class DoctrinePhotoRepository extends ServiceEntityRepository implements PhotoReadRepositoryInterface, PhotoFindRepositoryInterface, PhotoSaveRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -21,7 +22,13 @@ final class DoctrinePhotoRepository extends ServiceEntityRepository implements P
     public function findById(int $id): ?Photo
     {
         $photo = $this->find($id);
+
         return $photo instanceof Photo ? $photo : null;
+    }
+
+    public function findByExternalId(string $externalId, string $source): ?Photo
+    {
+        return $this->findOneBy(['externalId' => (string) $externalId, 'source' => $source]);
     }
 
     /**
@@ -35,5 +42,15 @@ final class DoctrinePhotoRepository extends ServiceEntityRepository implements P
             ->orderBy('p.id', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function save(Photo $photo): void
+    {
+        $this->getEntityManager()->persist($photo);
+    }
+
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
     }
 }
