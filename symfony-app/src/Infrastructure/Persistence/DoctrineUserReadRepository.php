@@ -19,4 +19,9 @@ final class DoctrineUserReadRepository implements UserReadRepositoryInterface
     {
         return $this->entityManager->find(User::class, $id);
     }
+
+    public function findByUsername(string $username): ?User
+    {
+        return $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
+    }
 }

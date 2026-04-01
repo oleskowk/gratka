@@ -14,3 +14,4 @@ Zaczynam od aplikacji symfony zgodnie z instrukcjami.
 - Używam Hexagonal+CQRS by odseparować logikę biznesową od frameworka. To pozwala na łatwiejsze testowanie i rozbudowę aplikacji. To daje nam architekturę gotową na przyjęcie DDD czy innych wzorców w konkretnych kontekstach w razie rozrostu domeny. A unikamy over-engineeringu, bo nie narzucamy od razu skomplikowanych wzorców tam gdzie nie są potrzebne.
 - Encje pozostają uwiązane do Doctrine, ale zostają bez logiki. To częsty kompromis, by uniknąć mapowania encji, gdzie raczej nie spodziewa się wyjścia z Doctrine.
 - GET /photo/{id}/like zmienia stan, więc powinno być POST. Warto też zabezpieczyć się przed CSFR - token?
+- Gdyby aplikacja rosła, warto by się pochylić nad DDD i wydzielić bounded contexty. Warto też rozważyć użycie Messengera jako szyny zdarzeń/komend.

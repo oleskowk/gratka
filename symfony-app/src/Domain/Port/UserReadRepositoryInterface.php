@@ -13,4 +13,6 @@ interface UserReadRepositoryInterface
      * In the future, it would be better to map it to a DTO.
      */
     public function findById(int $id): ?User;
+
+    public function findByUsername(string $username): ?User;
 }
