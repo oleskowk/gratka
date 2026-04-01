@@ -15,14 +15,14 @@ use App\Domain\Model\User;
 final class HomepageView
 {
     /**
-     * @param array            $photos      Photo entities with eagerly loaded users
-     * @param User|null        $currentUser Currently authenticated user, or null
-     * @param array<int, bool> $userLikes   Map of photoId => liked status
+     * @param iterable<\App\Domain\Model\Photo> $photos      Photo entities with eagerly loaded users
+     * @param User|null                         $currentUser Currently authenticated user, or null
+     * @param array<int, bool>                  $userLikes   Map of photoId => liked status
      */
     public function __construct(
-        public readonly array $photos,
+        public readonly iterable $photos,
         public readonly ?User $currentUser,
-        public readonly array $userLikes,
+        public readonly array $userLikes = [],
     ) {
     }
 }

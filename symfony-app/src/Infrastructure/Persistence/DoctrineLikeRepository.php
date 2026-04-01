@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence;
 
+use App\Application\Exception\PhotoNotFoundException;
+use App\Application\Exception\UserNotFoundException;
 use App\Domain\Model\Like;
 use App\Domain\Model\Photo;
 use App\Domain\Model\User;
@@ -21,6 +23,14 @@ final class DoctrineLikeRepository implements LikeRepositoryInterface
     {
         $user = $this->entityManager->getReference(User::class, $userId);
         $photo = $this->entityManager->getReference(Photo::class, $photoId);
+
+        if (!$user instanceof User) {
+            throw new UserNotFoundException();
+        }
+
+        if (!$photo instanceof Photo) {
+            throw new PhotoNotFoundException();
+        }
 
         $like = new Like();
         $like->setUser($user);

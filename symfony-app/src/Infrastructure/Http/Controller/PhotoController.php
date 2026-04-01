@@ -23,15 +23,14 @@ class PhotoController extends AbstractController
     public function like(int $id, Request $request): Response
     {
         $userId = $request->getSession()->get('user_id');
-
-        if (! $userId) {
+        if (!is_scalar($userId)) {
             $this->addFlash('error', 'You must be logged in to like photos.');
 
             return $this->redirectToRoute('home');
         }
 
         try {
-            ($this->commandHandler)(new ToggleLikeCommand(userId: $userId, photoId: $id));
+            ($this->commandHandler)(new ToggleLikeCommand(userId: (int) $userId, photoId: $id));
         } catch (NotFoundHttpException $e) {
             throw $e;
         }

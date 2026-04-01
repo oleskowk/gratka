@@ -39,7 +39,10 @@ final class GetHomepageQueryHandler
                 $likedPhotoIdsSet = array_flip($likedPhotoIds);
 
                 foreach ($photos as $photo) {
-                    $userLikes[$photo->getId()] = isset($likedPhotoIdsSet[$photo->getId()]);
+                    $id = $photo->getId();
+                    if (null !== $id) {
+                        $userLikes[$id] = isset($likedPhotoIdsSet[$id]);
+                    }
                 }
             }
         }

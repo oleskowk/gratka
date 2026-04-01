@@ -48,10 +48,11 @@ When implementing changes:
 
 - **Test-Driven Thinking**: Always consider how a change will be tested. Prefer writing tests alongside the implementation.
 - **Test Execution**: Run tests inside Docker before finalizing any task.
-  - Symfony: `docker-compose exec symfony php vendor/bin/phpunit`
+  - Symfony Tests: `make tests-symfony`
   - Phoenix: `docker-compose exec phoenix env MIX_ENV=test DB_HOST=phoenix-db mix test`
 - **Linting & Code Style**: Ensure the code follows styling guidelines.
-  - Symfony: `make lint-fix` should be run before finishing work.
+  - Symfony Style: `make lint-fix` should be run before finishing work.
+  - Symfony Analysis: `make phpstan` MUST pass without errors on level 9.
 - **Test Integrity**: NEVER modify existing tests to match a faulty implementation. If a test fails, prioritize fixing the code to meet the original test's expectations. Only update tests if the feature's requirements have explicitly changed.
 - **Error Handling**: Use structured error handling. Avoid generic "catch-all" blocks without logging or specific recovery strategies.
 

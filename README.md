@@ -70,6 +70,8 @@ make tests-symfony
 make lint
 # Automatyczna poprawa błędów stylu
 make lint-fix
+# Analiza statyczna
+make phpstan
 ```
 
 ## Komendy Phoenix

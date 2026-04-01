@@ -25,16 +25,12 @@ class ProfileController extends AbstractController
     {
         $session = $request->getSession();
         $userId = $session->get('user_id');
-
-        $this->logger->debug('Profile page requested', ['userId' => $userId]);
-
-        if (! $userId) {
-            $this->logger->info('Redirecting to home: no user_id in session');
-
+        if (!is_scalar($userId)) {
+            $this->logger->info('Redirecting to home: no user_id in session or invalid');
             return $this->redirectToRoute('home');
         }
 
-        $view = ($this->queryHandler)(new GetProfileQuery(userId: $userId));
+        $view = ($this->queryHandler)(new GetProfileQuery(userId: (int) $userId));
 
         if (null === $view) {
             $this->logger->warning('User not found for profile, clearing session', ['userId' => $userId]);

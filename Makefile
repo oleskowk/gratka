@@ -31,3 +31,6 @@ lint:
 
 lint-fix:
 	docker compose exec symfony php vendor/bin/php-cs-fixer fix
+
+phpstan:
+	docker compose exec symfony php vendor/bin/phpstan analyse --memory-limit=256M

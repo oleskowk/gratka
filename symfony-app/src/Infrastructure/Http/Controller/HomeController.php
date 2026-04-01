@@ -23,7 +23,8 @@ class HomeController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(Request $request): Response
     {
-        $userId = $request->getSession()->get('user_id');
+        $userIdValue = $request->getSession()->get('user_id');
+        $userId = is_scalar($userIdValue) ? (int) $userIdValue : null;
 
         $this->logger->debug('Home page requested', ['userId' => $userId]);
 

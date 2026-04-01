@@ -10,6 +10,7 @@ use App\Domain\Port\PhotoReadRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/** @extends ServiceEntityRepository<Photo> */
 final class DoctrinePhotoRepository extends ServiceEntityRepository implements PhotoReadRepositoryInterface, PhotoFindRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
@@ -19,7 +20,8 @@ final class DoctrinePhotoRepository extends ServiceEntityRepository implements P
 
     public function findById(int $id): ?Photo
     {
-        return $this->find($id);
+        $photo = $this->find($id);
+        return $photo instanceof Photo ? $photo : null;
     }
 
     /**

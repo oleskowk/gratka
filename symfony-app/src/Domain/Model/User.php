@@ -35,6 +35,7 @@ class User
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $bio = null;
 
+    /** @var Collection<int, Photo> */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Photo::class, cascade: ['persist', 'remove'])]
     private Collection $photos;
 
@@ -120,6 +121,7 @@ class User
         return $this;
     }
 
+    /** @return Collection<int, Photo> */
     public function getPhotos(): Collection
     {
         return $this->photos;
@@ -137,11 +139,7 @@ class User
 
     public function removePhoto(Photo $photo): self
     {
-        if ($this->photos->removeElement($photo)) {
-            if ($photo->getUser() === $this) {
-                $photo->setUser(null);
-            }
-        }
+        $this->photos->removeElement($photo);
 
         return $this;
     }

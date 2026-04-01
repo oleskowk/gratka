@@ -46,6 +46,6 @@ final class AuthenticateUserQueryHandler
             'username' => $user->getUsername(),
         ]);
 
-        return new AuthenticateUserView($user->getId(), $user->getUsername());
+        return new AuthenticateUserView((int) $user->getId(), $user->getUsername());
     }
 }
