@@ -15,3 +15,4 @@ Zaczynam od aplikacji symfony zgodnie z instrukcjami.
 - Encje pozostają uwiązane do Doctrine, ale zostają bez logiki. To częsty kompromis, by uniknąć mapowania encji, gdzie raczej nie spodziewa się wyjścia z Doctrine.
 - GET /photo/{id}/like zmienia stan, więc powinno być POST. Warto też zabezpieczyć się przed CSFR - token?
 - Gdyby aplikacja rosła, warto by się pochylić nad DDD i wydzielić bounded contexty. Warto też rozważyć użycie Messengera jako szyny zdarzeń/komend.
+- Aplikacja symfony-app wygląda na aplikację kliencką, jednak nie posiada standardowego systemu użytkowników, sam użytkownik nie posiada nawet hasła. Nietypowy wybór. Warto by się zastanowić czy to dobre podejście i rozważyć użycie symfony security do zarządzania autentuykacją/autoryzacją.
