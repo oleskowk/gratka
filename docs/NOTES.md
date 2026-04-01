@@ -17,3 +17,4 @@ Zaczynam od aplikacji symfony zgodnie z instrukcjami.
 - Gdyby aplikacja rosła, warto by się pochylić nad DDD i wydzielić bounded contexty. Warto też rozważyć użycie Messengera jako szyny zdarzeń/komend.
 - Aplikacja symfony-app wygląda na aplikację kliencką, jednak nie posiada standardowego systemu użytkowników, sam użytkownik nie posiada nawet hasła. Nietypowy wybór. Warto by się zastanowić czy to dobre podejście i rozważyć użycie symfony security do zarządzania autentuykacją/autoryzacją.
 - [Optymalizacja] Pobierając zdjęcia na stronę główną, pobieraliśmy też informację o tym czy zdjęcie zostalo polubione. Dla każdego zdjecia, osobne zapytanie. Zmieniam to i pobieram listę polubionych wcześniej - to redukuje listę zapytań.
+- Kontroler auth nie jest już podatny na sqlinjection - mimo braku walidacji danych wejściowych, zapytanie jest budowane w bezpieczny sposób. Warto by jednak ten problem rozwizać u źródła przeprojektowując autoryzację.

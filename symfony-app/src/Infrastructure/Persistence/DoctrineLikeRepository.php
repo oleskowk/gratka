@@ -28,6 +28,8 @@ final class DoctrineLikeRepository implements LikeRepositoryInterface
 
         $this->entityManager->persist($like);
 
+        // This is a workaround for a race condition. Better way might be to implement a domain model that would handle this.
+        // Still it is possible to like the same photo twice - this should be handled by the domain model and UNIQUE constraint on the database
         $this->entityManager->createQueryBuilder()
             ->update(Photo::class, 'p')
             ->set('p.likeCounter', 'p.likeCounter + 1')
