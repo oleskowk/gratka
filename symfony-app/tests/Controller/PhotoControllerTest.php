@@ -143,6 +143,10 @@ class PhotoControllerTest extends WebTestCase
         $this->entityManager->persist($token);
         $this->entityManager->flush();
 
-        $this->client->request('GET', sprintf('/auth/%s/%s', $user->getUsername(), $tokenValue));
+        $this->client->request('POST', '/auth/login', [
+            'username' => $user->getUsername(),
+            'token' => $tokenValue,
+        ]);
+        $this->client->followRedirect();
     }
 }

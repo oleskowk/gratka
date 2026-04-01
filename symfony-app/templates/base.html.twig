@@ -40,7 +40,7 @@
             opacity: 0.9;
         }
         
-        .profile-menu {
+        .profile-menu, .login-menu {
             position: fixed;
             top: 20px;
             right: 20px;
@@ -193,6 +193,12 @@
                 <div class="profile-dropdown-separator"></div>
                 <a href="{{ path('logout') }}">🚪 Logout</a>
             </div>
+        </div>
+    {% else %}
+        <div class="login-menu">
+            <a href="{{ path('login') }}" class="profile-icon" title="Login">
+                🔑
+            </a>
         </div>
     {% endif %}
     

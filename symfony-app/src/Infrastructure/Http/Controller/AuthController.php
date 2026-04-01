@@ -22,9 +22,23 @@ class AuthController extends AbstractController
     ) {
     }
 
-    #[Route('/auth/{username}/{token}', name: 'auth_login')]
-    public function login(string $username, string $token, Request $request): Response
+    #[Route('/login', name: 'login', methods: ['GET'])]
+    public function showLogin(): Response
     {
+        return $this->render('auth/login.html.twig');
+    }
+
+    #[Route('/auth/login', name: 'auth_login', methods: ['POST'])]
+    public function login(Request $request): Response
+    {
+        $username = $request->request->get('username');
+        $token = $request->request->get('token');
+
+        if (!$username || !$token) {
+            $this->addFlash('error', 'Please provide both username and token.');
+            return $this->redirectToRoute('login');
+        }
+
         $this->logger->info('Authentication request received', ['username' => $username]);
 
         try {
@@ -45,7 +59,8 @@ class AuthController extends AbstractController
                 'error' => $e->getMessage(),
             ]);
 
-            return new Response($e->getMessage(), $e instanceof InvalidTokenException ? 401 : 404);
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('login');
         }
     }
 

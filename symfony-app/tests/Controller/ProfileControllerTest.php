@@ -58,8 +58,12 @@ class ProfileControllerTest extends WebTestCase
     {
         // GIVEN
         $this->client->request(
-            'GET',
-            sprintf('/auth/%s/%s', $this->user->getUsername(), $this->authToken->getToken())
+            'POST',
+            '/auth/login',
+            [
+                'username' => $this->user->getUsername(),
+                'token' => $this->authToken->getToken(),
+            ]
         );
         $this->assertResponseRedirects('/');
 

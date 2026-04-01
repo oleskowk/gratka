@@ -40,27 +40,33 @@ class AuthControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function itReturns401ForInvalidToken(): void
+    public function itReturnsRedirectToLoginForInvalidToken(): void
     {
         // WHEN
-        $url = sprintf('/auth/%s/invalid_token', $this->defaultUser->getUsername());
-        $this->client->request('GET', $url);
+        $this->client->request('POST', '/auth/login', [
+            'username' => $this->defaultUser->getUsername(),
+            'token' => 'invalid_token',
+        ]);
 
         // THEN
-        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseRedirects('/login');
+        $this->client->followRedirect();
         $this->assertStringContainsString('Invalid token', $this->client->getResponse()->getContent());
         $this->assertIsNotAuthenticated();
     }
 
     #[Test]
-    public function itReturns404ForValidTokenButInvalidUser(): void
+    public function itReturnsRedirectToLoginForValidTokenButInvalidUser(): void
     {
         // WHEN
-        $url = sprintf('/auth/non_existent_user/%s', $this->defaultToken);
-        $this->client->request('GET', $url);
+        $this->client->request('POST', '/auth/login', [
+            'username' => 'non_existent_user',
+            'token' => $this->defaultToken,
+        ]);
 
         // THEN
-        $this->assertResponseStatusCodeSame(404);
+        $this->assertResponseRedirects('/login');
+        $this->client->followRedirect();
         $this->assertStringContainsString('User not found', $this->client->getResponse()->getContent());
         $this->assertIsNotAuthenticated();
     }
@@ -81,8 +87,10 @@ class AuthControllerTest extends WebTestCase
 
     private function givenUserIsAuthenticated(): void
     {
-        $url = sprintf('/auth/%s/%s', $this->defaultUser->getUsername(), $this->defaultToken);
-        $this->client->request('GET', $url);
+        $this->client->request('POST', '/auth/login', [
+            'username' => $this->defaultUser->getUsername(),
+            'token' => $this->defaultToken,
+        ]);
     }
 
     private function createPersistedUser(string $username): User
