@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Application\Command;
 
+use Psr\Log\NullLogger;
 use App\Application\Command\ToggleLikeCommand;
 use App\Application\Command\ToggleLikeCommandHandler;
 use App\Domain\Model\Photo;
@@ -22,8 +23,13 @@ final class ToggleLikeCommandHandlerTest extends TestCase
     {
         $this->photoRepository = $this->createMock(PhotoFindRepositoryInterface::class);
         $this->likeRepository = $this->createMock(LikeRepositoryInterface::class);
-        $this->handler = new ToggleLikeCommandHandler($this->photoRepository, $this->likeRepository);
+        $this->handler = new ToggleLikeCommandHandler(
+            $this->photoRepository,
+            $this->likeRepository,
+            new NullLogger()
+        );
     }
+
 
     public function test_it_throws_exception_if_photo_not_found(): void
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Controller;
 
+use Psr\Log\LoggerInterface;
 use App\Application\Query\GetHomepageQuery;
 use App\Application\Query\GetHomepageQueryHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     public function __construct(
-        private GetHomepageQueryHandler $queryHandler,
+        private readonly GetHomepageQueryHandler $queryHandler,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -22,6 +24,8 @@ class HomeController extends AbstractController
     public function index(Request $request): Response
     {
         $userId = $request->getSession()->get('user_id');
+
+        $this->logger->debug('Home page requested', ['userId' => $userId]);
 
         $view = ($this->queryHandler)(
             new GetHomepageQuery(currentUserId: $userId),
@@ -34,3 +38,4 @@ class HomeController extends AbstractController
         ]);
     }
 }
+

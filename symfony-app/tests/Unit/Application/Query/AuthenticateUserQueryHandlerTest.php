@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Application\Query;
 
+use Psr\Log\NullLogger;
 use App\Application\Exception\InvalidTokenException;
 use App\Application\Exception\UserNotFoundException;
 use App\Application\Query\AuthenticateUserQuery;
@@ -25,8 +26,13 @@ final class AuthenticateUserQueryHandlerTest extends TestCase
     {
         $this->authTokenRepository = $this->createMock(AuthTokenReadRepositoryInterface::class);
         $this->userRepository = $this->createMock(UserReadRepositoryInterface::class);
-        $this->handler = new AuthenticateUserQueryHandler($this->authTokenRepository, $this->userRepository);
+        $this->handler = new AuthenticateUserQueryHandler(
+            $this->authTokenRepository,
+            $this->userRepository,
+            new NullLogger()
+        );
     }
+
 
     public function test_it_throws_exception_if_token_not_found(): void
     {

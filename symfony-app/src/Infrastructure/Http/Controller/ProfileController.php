@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Controller;
 
+use Psr\Log\LoggerInterface;
 use App\Application\Query\GetProfileQuery;
 use App\Application\Query\GetProfileQueryHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProfileController extends AbstractController
 {
     public function __construct(
-        private GetProfileQueryHandler $queryHandler,
+        private readonly GetProfileQueryHandler $queryHandler,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -24,13 +26,17 @@ class ProfileController extends AbstractController
         $session = $request->getSession();
         $userId = $session->get('user_id');
 
+        $this->logger->debug('Profile page requested', ['userId' => $userId]);
+
         if (!$userId) {
+            $this->logger->info('Redirecting to home: no user_id in session');
             return $this->redirectToRoute('home');
         }
 
         $view = ($this->queryHandler)(new GetProfileQuery(userId: $userId));
 
         if ($view === null) {
+            $this->logger->warning('User not found for profile, clearing session', ['userId' => $userId]);
             $session->clear();
             return $this->redirectToRoute('home');
         }
@@ -40,3 +46,4 @@ class ProfileController extends AbstractController
         ]);
     }
 }
+

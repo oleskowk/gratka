@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Application\Query;
 
+use Psr\Log\NullLogger;
 use App\Application\Query\GetHomepageQuery;
 use App\Application\Query\GetHomepageQueryHandler;
 use App\Domain\Model\Photo;
@@ -28,9 +29,11 @@ final class GetHomepageQueryHandlerTest extends TestCase
         $this->handler = new GetHomepageQueryHandler(
             $this->photoReadRepository,
             $this->likeRepository,
-            $this->userReadRepository
+            $this->userReadRepository,
+            new NullLogger()
         );
     }
+
 
     public function test_it_returns_homepage_without_user_likes(): void
     {

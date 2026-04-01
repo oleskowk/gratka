@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Controller;
 
+use Psr\Log\LoggerInterface;
 use App\Application\Exception\InvalidTokenException;
 use App\Application\Exception\UserNotFoundException;
 use App\Application\Query\AuthenticateUserQuery;
@@ -16,13 +17,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class AuthController extends AbstractController
 {
     public function __construct(
-        private readonly AuthenticateUserQueryHandler $authenticateUserHandler
+        private readonly AuthenticateUserQueryHandler $authenticateUserHandler,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
     #[Route('/auth/{username}/{token}', name: 'auth_login')]
     public function login(string $username, string $token, Request $request): Response
     {
+        $this->logger->info('Authentication request received', ['username' => $username]);
+
         try {
             $user = ($this->authenticateUserHandler)(new AuthenticateUserQuery($username, $token));
 
@@ -32,11 +36,15 @@ class AuthController extends AbstractController
 
             $this->addFlash('success', 'Welcome back, ' . $user->username . '!');
 
+            $this->logger->info('User successfully logged in via token', ['username' => $username, 'userId' => $user->id]);
+
             return $this->redirectToRoute('home');
-        } catch (InvalidTokenException $e) {
-            return new Response($e->getMessage(), 401);
-        } catch (UserNotFoundException $e) {
-            return new Response($e->getMessage(), 404);
+        } catch (InvalidTokenException|UserNotFoundException $e) {
+            $this->logger->warning('Authentication failed at controller level', [
+                'username' => $username,
+                'error' => $e->getMessage()
+            ]);
+            return new Response($e->getMessage(), $e instanceof InvalidTokenException ? 401 : 404);
         }
     }
 
@@ -44,6 +52,7 @@ class AuthController extends AbstractController
     public function logout(Request $request): Response
     {
         $session = $request->getSession();
+        $this->logger->info('User logging out', ['userId' => $session->get('user_id')]);
         $session->clear();
 
         $this->addFlash('info', 'You have been logged out successfully.');
@@ -51,3 +60,4 @@ class AuthController extends AbstractController
         return $this->redirectToRoute('home');
     }
 }
+
