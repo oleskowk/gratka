@@ -5,15 +5,24 @@ RUN apt-get update && apt-get install -y git unzip libpq-dev libxml2-dev \
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+ARG UID=1000
+ARG GID=1000
+
+RUN groupadd -g $GID appgroup || true && \
+    useradd -u $UID -g $GID -m appuser || true
+
 WORKDIR /app
 
 EXPOSE 8000
 
 FROM base as dev
 
-COPY ./entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+USER appuser
+
+ENTRYPOINT ["entrypoint.sh"]
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public", "public/index.php"]
 
 FROM base as prod

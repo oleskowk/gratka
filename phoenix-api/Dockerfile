@@ -2,16 +2,24 @@ FROM elixir:1.15-alpine AS base
 
 RUN apk add --no-cache build-base git nodejs npm inotify-tools bash
 
-WORKDIR /app
+ARG UID=1000
+ARG GID=1000
 
-RUN mix local.hex --force && mix local.rebar --force
+RUN addgroup -g $GID appgroup && \
+    adduser -u $UID -G appgroup -D appuser
+
+WORKDIR /app
 
 FROM base AS dev
 
 ENV MIX_ENV=dev
 
 COPY ./entrypoint.sh /entrypoint.sh
+USER root
 RUN chmod +x /entrypoint.sh
+USER appuser
+
+RUN mix local.hex --force && mix local.rebar --force
 
 EXPOSE 4000
 
