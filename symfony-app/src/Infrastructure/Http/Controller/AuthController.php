@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Controller;
 
-use Psr\Log\LoggerInterface;
 use App\Application\Exception\InvalidTokenException;
 use App\Application\Exception\UserNotFoundException;
 use App\Application\Query\AuthenticateUserQuery;
 use App\Application\Query\AuthenticateUserQueryHandler;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +34,7 @@ class AuthController extends AbstractController
             $session->set('user_id', $user->id);
             $session->set('username', $user->username);
 
-            $this->addFlash('success', 'Welcome back, ' . $user->username . '!');
+            $this->addFlash('success', 'Welcome back, '.$user->username.'!');
 
             $this->logger->info('User successfully logged in via token', ['username' => $username, 'userId' => $user->id]);
 
@@ -42,8 +42,9 @@ class AuthController extends AbstractController
         } catch (InvalidTokenException|UserNotFoundException $e) {
             $this->logger->warning('Authentication failed at controller level', [
                 'username' => $username,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
+
             return new Response($e->getMessage(), $e instanceof InvalidTokenException ? 401 : 404);
         }
     }
@@ -60,4 +61,3 @@ class AuthController extends AbstractController
         return $this->redirectToRoute('home');
     }
 }
-

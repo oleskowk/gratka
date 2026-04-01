@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Query;
 
-use Psr\Log\LoggerInterface;
 use App\Domain\Port\UserReadRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 final class GetProfileQueryHandler
 {
@@ -21,12 +21,12 @@ final class GetProfileQueryHandler
 
         $user = $this->userRepository->findById($query->userId);
 
-        if ($user === null) {
+        if (null === $user) {
             $this->logger->warning('Profile user not found', ['userId' => $query->userId]);
+
             return null;
         }
 
         return new ProfileView(user: $user);
     }
 }
-

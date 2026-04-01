@@ -50,6 +50,7 @@ class Photo
     public function setImageUrl(string $imageUrl): self
     {
         $this->imageUrl = $imageUrl;
+
         return $this;
     }
 
@@ -61,6 +62,7 @@ class Photo
     public function setLocation(?string $location): self
     {
         $this->location = $location;
+
         return $this;
     }
 
@@ -72,6 +74,7 @@ class Photo
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -83,6 +86,7 @@ class Photo
     public function setCamera(?string $camera): self
     {
         $this->camera = $camera;
+
         return $this;
     }
 
@@ -94,6 +98,7 @@ class Photo
     public function setTakenAt(?\DateTimeImmutable $takenAt): self
     {
         $this->takenAt = $takenAt;
+
         return $this;
     }
 
@@ -105,6 +110,7 @@ class Photo
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -116,6 +122,7 @@ class Photo
     public function setLikeCounter(int $likeCounter): self
     {
         $this->likeCounter = $likeCounter;
+
         return $this;
     }
 }

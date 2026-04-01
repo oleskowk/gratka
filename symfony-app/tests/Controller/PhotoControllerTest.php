@@ -24,7 +24,7 @@ class PhotoControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function it_redirects_anonymous_user_when_trying_to_like_photo(): void
+    public function itRedirectsAnonymousUserWhenTryingToLikePhoto(): void
     {
         // WHEN
         $this->client->request('GET', '/photo/999/like');
@@ -34,7 +34,7 @@ class PhotoControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function it_throws_404_when_liking_non_existent_photo(): void
+    public function itThrows404WhenLikingNonExistentPhoto(): void
     {
         // GIVEN
         $user = $this->createPersistedUser('test_user');
@@ -48,7 +48,7 @@ class PhotoControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function it_likes_photo_when_logged_in(): void
+    public function itLikesPhotoWhenLoggedIn(): void
     {
         // GIVEN
         $user = $this->createPersistedUser('user');
@@ -68,14 +68,14 @@ class PhotoControllerTest extends WebTestCase
         // THEN
         $this->assertResponseRedirects('/');
         $this->client->followRedirect();
-        
+
         // Assert it is now liked on the page
         $this->assertSelectorExists(sprintf('a.like-button[href="/photo/%d/like"].liked', $photo->getId()));
         $this->assertSelectorTextContains(sprintf('a.like-button[href="/photo/%d/like"]', $photo->getId()), '❤️');
     }
 
     #[Test]
-    public function it_unlikes_photo_if_already_liked(): void
+    public function itUnlikesPhotoIfAlreadyLiked(): void
     {
         // GIVEN
         $user = $this->createPersistedUser('user');
@@ -105,8 +105,8 @@ class PhotoControllerTest extends WebTestCase
     private function createPersistedUser(string $prefix): User
     {
         $user = new User();
-        $user->setUsername(uniqid($prefix . '_'))
-             ->setEmail(uniqid() . '@example.com')
+        $user->setUsername(uniqid($prefix.'_'))
+             ->setEmail(uniqid().'@example.com')
              ->setName('Test')
              ->setLastName('User')
              ->setAge(20)
@@ -136,7 +136,7 @@ class PhotoControllerTest extends WebTestCase
 
     private function authenticateAs(User $user): void
     {
-        $tokenValue = 'test-token-' . uniqid();
+        $tokenValue = 'test-token-'.uniqid();
         $token = new AuthToken();
         $token->setToken($tokenValue)->setUser($user);
 

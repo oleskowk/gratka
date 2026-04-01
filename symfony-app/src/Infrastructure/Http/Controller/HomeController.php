@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Http\Controller;
 
-use Psr\Log\LoggerInterface;
 use App\Application\Query\GetHomepageQuery;
 use App\Application\Query\GetHomepageQueryHandler;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,4 +38,3 @@ class HomeController extends AbstractController
         ]);
     }
 }
-

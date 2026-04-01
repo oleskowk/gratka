@@ -24,8 +24,9 @@ class PhotoController extends AbstractController
     {
         $userId = $request->getSession()->get('user_id');
 
-        if (!$userId) {
+        if (! $userId) {
             $this->addFlash('error', 'You must be logged in to like photos.');
+
             return $this->redirectToRoute('home');
         }
 

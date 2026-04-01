@@ -27,7 +27,7 @@ class ProfileControllerTest extends WebTestCase
         $this->user = new User();
         $this->user
             ->setUsername($username)
-            ->setEmail($username . '@example.com')
+            ->setEmail($username.'@example.com')
             ->setName('Jan')
             ->setLastName('Kowalski')
             ->setAge(20)
@@ -35,7 +35,7 @@ class ProfileControllerTest extends WebTestCase
 
         $this->authToken = new AuthToken();
         $this->authToken
-            ->setToken('test-token-' . uniqid())
+            ->setToken('test-token-'.uniqid())
             ->setUser($this->user);
 
         $this->entityManager->persist($this->user);
@@ -44,7 +44,7 @@ class ProfileControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function it_redirects_anonymous_user_to_home(): void
+    public function itRedirectsAnonymousUserToHome(): void
     {
         // WHEN
         $this->client->request('GET', '/profile');
@@ -54,7 +54,7 @@ class ProfileControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function it_shows_profile_for_logged_in_user(): void
+    public function itShowsProfileForLoggedInUser(): void
     {
         // GIVEN
         $this->client->request(
@@ -69,7 +69,7 @@ class ProfileControllerTest extends WebTestCase
         // THEN
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1.profile-username', 'Jan Kowalski');
-        $this->assertSelectorTextContains('.profile-handle', '@' . $this->user->getUsername());
+        $this->assertSelectorTextContains('.profile-handle', '@'.$this->user->getUsername());
         $this->assertSelectorTextContains('.profile-field-value', $this->user->getEmail());
     }
 }

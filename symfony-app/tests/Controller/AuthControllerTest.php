@@ -23,13 +23,13 @@ class AuthControllerTest extends WebTestCase
         $this->client = static::createClient();
         $this->entityManager = $this->client->getContainer()->get('doctrine')->getManager();
 
-        $this->defaultToken = 'test-token-' . uniqid();
-        $this->defaultUser = $this->createPersistedUser('test_' . uniqid());
+        $this->defaultToken = 'test-token-'.uniqid();
+        $this->defaultUser = $this->createPersistedUser('test_'.uniqid());
         $this->createPersistedToken($this->defaultUser, $this->defaultToken);
     }
 
     #[Test]
-    public function it_successfully_logs_in_user_with_valid_token_and_username(): void
+    public function itSuccessfullyLogsInUserWithValidTokenAndUsername(): void
     {
         // GIVEN
         $this->givenUserIsAuthenticated();
@@ -40,7 +40,7 @@ class AuthControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function it_returns_401_for_invalid_token(): void
+    public function itReturns401ForInvalidToken(): void
     {
         // WHEN
         $url = sprintf('/auth/%s/invalid_token', $this->defaultUser->getUsername());
@@ -53,7 +53,7 @@ class AuthControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function it_returns_404_for_valid_token_but_invalid_user(): void
+    public function itReturns404ForValidTokenButInvalidUser(): void
     {
         // WHEN
         $url = sprintf('/auth/non_existent_user/%s', $this->defaultToken);
@@ -66,7 +66,7 @@ class AuthControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function it_logs_out_user_and_clears_session(): void
+    public function itLogsOutUserAndClearsSession(): void
     {
         // GIVEN
         $this->givenUserIsAuthenticated();
@@ -89,7 +89,7 @@ class AuthControllerTest extends WebTestCase
     {
         $user = new User();
         $user->setUsername($username)
-             ->setEmail($username . '@example.com')
+             ->setEmail($username.'@example.com')
              ->setName('Test')
              ->setLastName('User')
              ->setAge(30)
@@ -126,4 +126,3 @@ class AuthControllerTest extends WebTestCase
         $this->assertSelectorNotExists('a[href="/logout"]', 'User should NOT see logout link when anonymous.');
     }
 }
-

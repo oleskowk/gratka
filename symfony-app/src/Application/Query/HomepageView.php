@@ -15,9 +15,9 @@ use App\Domain\Model\User;
 final class HomepageView
 {
     /**
-     * @param array  $photos      Photo entities with eagerly loaded users
-     * @param User|null $currentUser Currently authenticated user, or null
-     * @param array<int, bool> $userLikes  Map of photoId => liked status
+     * @param array            $photos      Photo entities with eagerly loaded users
+     * @param User|null        $currentUser Currently authenticated user, or null
+     * @param array<int, bool> $userLikes   Map of photoId => liked status
      */
     public function __construct(
         public readonly array $photos,

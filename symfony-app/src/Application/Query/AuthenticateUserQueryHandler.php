@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Application\Query;
 
-use Psr\Log\LoggerInterface;
-use App\Domain\Port\AuthTokenReadRepositoryInterface;
-use App\Domain\Port\UserReadRepositoryInterface;
 use App\Application\Exception\InvalidTokenException;
 use App\Application\Exception\UserNotFoundException;
+use App\Domain\Port\AuthTokenReadRepositoryInterface;
+use App\Domain\Port\UserReadRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 final class AuthenticateUserQueryHandler
 {
@@ -27,15 +27,17 @@ final class AuthenticateUserQueryHandler
 
         $token = $this->authTokenRepository->findByToken($query->token);
 
-        if (!$token) {
+        if (! $token) {
             $this->logger->warning('Authentication failed: invalid token');
+
             throw new InvalidTokenException();
         }
 
         $user = $this->userRepository->findByUsername($query->username);
 
-        if (!$user) {
+        if (! $user) {
             $this->logger->warning('Authentication failed: user not found', ['username' => $query->username]);
+
             throw new UserNotFoundException();
         }
 
@@ -47,4 +49,3 @@ final class AuthenticateUserQueryHandler
         return new AuthenticateUserView($user->getId(), $user->getUsername());
     }
 }
-

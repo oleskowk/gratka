@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Application\Query;
 
-use Psr\Log\NullLogger;
 use App\Application\Query\GetHomepageQuery;
 use App\Application\Query\GetHomepageQueryHandler;
 use App\Domain\Model\Photo;
@@ -13,6 +12,7 @@ use App\Domain\Port\LikeRepositoryInterface;
 use App\Domain\Port\PhotoReadRepositoryInterface;
 use App\Domain\Port\UserReadRepositoryInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 final class GetHomepageQueryHandlerTest extends TestCase
 {
@@ -34,8 +34,7 @@ final class GetHomepageQueryHandlerTest extends TestCase
         );
     }
 
-
-    public function test_it_returns_homepage_without_user_likes(): void
+    public function testItReturnsHomepageWithoutUserLikes(): void
     {
         $photos = [$this->createMock(Photo::class)];
         $this->photoReadRepository->method('findAllWithUsers')->willReturn($photos);
@@ -47,7 +46,7 @@ final class GetHomepageQueryHandlerTest extends TestCase
         $this->assertEmpty($view->userLikes);
     }
 
-    public function test_it_returns_homepage_with_user_likes_if_logged_in(): void
+    public function testItReturnsHomepageWithUserLikesIfLoggedIn(): void
     {
         $user = $this->createMock(User::class);
         $photo1 = $this->createMock(Photo::class);
@@ -71,7 +70,7 @@ final class GetHomepageQueryHandlerTest extends TestCase
         $this->assertEquals([101 => true, 102 => false], $view->userLikes);
     }
 
-    public function test_it_handles_missing_current_user_id_gracefully(): void
+    public function testItHandlesMissingCurrentUserIdGracefully(): void
     {
         $photos = [$this->createMock(Photo::class)];
         $this->photoReadRepository->method('findAllWithUsers')->willReturn($photos);

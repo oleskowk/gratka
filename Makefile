@@ -25,3 +25,9 @@ tests-symfony:
 
 tests-phoenix:
 	docker compose exec phoenix env MIX_ENV=test DB_HOST=phoenix-db mix test
+
+lint:
+	docker compose exec symfony php vendor/bin/php-cs-fixer fix --dry-run --diff
+
+lint-fix:
+	docker compose exec symfony php vendor/bin/php-cs-fixer fix

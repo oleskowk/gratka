@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Application\Command;
 
-use Psr\Log\NullLogger;
 use App\Application\Command\ToggleLikeCommand;
 use App\Application\Command\ToggleLikeCommandHandler;
 use App\Domain\Model\Photo;
 use App\Domain\Port\LikeRepositoryInterface;
 use App\Domain\Port\PhotoFindRepositoryInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ToggleLikeCommandHandlerTest extends TestCase
@@ -30,8 +30,7 @@ final class ToggleLikeCommandHandlerTest extends TestCase
         );
     }
 
-
-    public function test_it_throws_exception_if_photo_not_found(): void
+    public function testItThrowsExceptionIfPhotoNotFound(): void
     {
         $this->photoRepository->method('findById')->willReturn(null);
 
@@ -41,7 +40,7 @@ final class ToggleLikeCommandHandlerTest extends TestCase
         ($this->handler)(new ToggleLikeCommand(userId: 1, photoId: 999));
     }
 
-    public function test_it_unlikes_if_already_liked(): void
+    public function testItUnlikesIfAlreadyLiked(): void
     {
         $photo = $this->createMock(Photo::class);
         $this->photoRepository->method('findById')->willReturn($photo);
@@ -57,7 +56,7 @@ final class ToggleLikeCommandHandlerTest extends TestCase
         ($this->handler)(new ToggleLikeCommand(userId: 1, photoId: 100));
     }
 
-    public function test_it_likes_if_not_liked_yet(): void
+    public function testItLikesIfNotLikedYet(): void
     {
         $photo = $this->createMock(Photo::class);
         $this->photoRepository->method('findById')->willReturn($photo);

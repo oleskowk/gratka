@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Application\Query;
 
-use Psr\Log\LoggerInterface;
 use App\Domain\Port\LikeRepositoryInterface;
 use App\Domain\Port\PhotoReadRepositoryInterface;
 use App\Domain\Port\UserReadRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 final class GetHomepageQueryHandler
 {
@@ -30,10 +30,10 @@ final class GetHomepageQueryHandler
         $currentUser = null;
         $userLikes = [];
 
-        if ($query->currentUserId !== null) {
+        if (null !== $query->currentUserId) {
             $currentUser = $this->userReadRepository->findById($query->currentUserId);
 
-            if ($currentUser !== null) {
+            if (null !== $currentUser) {
                 $this->logger->debug('Current user found', ['userId' => $query->currentUserId]);
                 $likedPhotoIds = $this->likeRepository->getLikedPhotoIdsForUser($query->currentUserId);
                 $likedPhotoIdsSet = array_flip($likedPhotoIds);
@@ -51,4 +51,3 @@ final class GetHomepageQueryHandler
         );
     }
 }
-

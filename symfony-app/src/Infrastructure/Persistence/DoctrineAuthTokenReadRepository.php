@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence;
 
-use App\Domain\Port\AuthTokenReadRepositoryInterface;
 use App\Domain\Model\AuthToken;
+use App\Domain\Port\AuthTokenReadRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineAuthTokenReadRepository implements AuthTokenReadRepositoryInterface

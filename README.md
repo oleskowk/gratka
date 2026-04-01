@@ -64,6 +64,14 @@ docker-compose exec symfony php vendor/bin/phpunit
 make tests-symfony
 ```
 
+### Analiza statyczna i linter
+```bash
+# Sprawdzenie błędów stylu (dry-run)
+make lint
+# Automatyczna poprawa błędów stylu
+make lint-fix
+```
+
 ## Komendy Phoenix
 
 ### Migracja bazy danych

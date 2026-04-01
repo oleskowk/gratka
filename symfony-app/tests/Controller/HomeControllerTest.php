@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
 
 class HomeControllerTest extends WebTestCase
 {
@@ -30,7 +29,7 @@ class HomeControllerTest extends WebTestCase
         $this->user = new User();
         $this->user
             ->setUsername($username)
-            ->setEmail($username . '@a.com')
+            ->setEmail($username.'@a.com')
             ->setName('Jan')
             ->setLastName('Kowalski')
             ->setAge(20)
@@ -47,7 +46,7 @@ class HomeControllerTest extends WebTestCase
 
         $this->authToken = new AuthToken();
         $this->authToken
-            ->setToken('test-token-' . uniqid())
+            ->setToken('test-token-'.uniqid())
             ->setUser($this->user);
 
         $this->entityManager->persist($this->user);
@@ -57,19 +56,19 @@ class HomeControllerTest extends WebTestCase
     }
 
     #[Test]
-    public function it_renders_homepage_for_anonymous_user(): void
+    public function itRendersHomepageForAnonymousUser(): void
     {
         $this->client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('.photo-card');
-        $this->assertSelectorExists('img[src="' . $this->photo->getImageUrl() . '"]');
+        $this->assertSelectorExists('img[src="'.$this->photo->getImageUrl().'"]');
         $this->assertSelectorTextContains('.photo-description', $this->photo->getDescription());
         $this->assertSelectorTextContains('.author-name', 'Jan Kowalski');
     }
 
     #[Test]
-    public function it_renders_homepage_with_likes_for_logged_in_user(): void
+    public function itRendersHomepageWithLikesForLoggedInUser(): void
     {
         $this->client->request(
             'GET',
@@ -78,7 +77,7 @@ class HomeControllerTest extends WebTestCase
         $this->assertResponseRedirects('/');
         $this->client->followRedirect();
 
-        $this->client->request('GET', '/photo/' . $this->photo->getId() . '/like');
+        $this->client->request('GET', '/photo/'.$this->photo->getId().'/like');
         $this->assertResponseRedirects('/');
         $this->client->followRedirect();
 

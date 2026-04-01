@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Application\Query;
 
-use Psr\Log\NullLogger;
 use App\Application\Exception\InvalidTokenException;
 use App\Application\Exception\UserNotFoundException;
 use App\Application\Query\AuthenticateUserQuery;
@@ -15,6 +14,7 @@ use App\Domain\Model\User;
 use App\Domain\Port\AuthTokenReadRepositoryInterface;
 use App\Domain\Port\UserReadRepositoryInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 final class AuthenticateUserQueryHandlerTest extends TestCase
 {
@@ -33,8 +33,7 @@ final class AuthenticateUserQueryHandlerTest extends TestCase
         );
     }
 
-
-    public function test_it_throws_exception_if_token_not_found(): void
+    public function testItThrowsExceptionIfTokenNotFound(): void
     {
         $this->authTokenRepository->method('findByToken')->willReturn(null);
 
@@ -43,7 +42,7 @@ final class AuthenticateUserQueryHandlerTest extends TestCase
         ($this->handler)(new AuthenticateUserQuery('username', 'invalid-token'));
     }
 
-    public function test_it_throws_exception_if_user_not_found(): void
+    public function testItThrowsExceptionIfUserNotFound(): void
     {
         $token = $this->createMock(AuthToken::class);
         $this->authTokenRepository->method('findByToken')->willReturn($token);
@@ -54,7 +53,7 @@ final class AuthenticateUserQueryHandlerTest extends TestCase
         ($this->handler)(new AuthenticateUserQuery('unknown-user', 'valid-token'));
     }
 
-    public function test_it_returns_view_if_everything_is_correct(): void
+    public function testItReturnsViewIfEverythingIsCorrect(): void
     {
         $token = $this->createMock(AuthToken::class);
         $user = $this->createMock(User::class);

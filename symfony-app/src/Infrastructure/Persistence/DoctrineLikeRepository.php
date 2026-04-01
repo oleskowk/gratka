@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence;
 
-use App\Domain\Port\LikeRepositoryInterface;
+use App\Domain\Model\Like;
 use App\Domain\Model\Photo;
 use App\Domain\Model\User;
-use App\Domain\Model\Like;
+use App\Domain\Port\LikeRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineLikeRepository implements LikeRepositoryInterface
@@ -54,7 +54,7 @@ final class DoctrineLikeRepository implements LikeRepositoryInterface
             ->getQuery()
             ->getOneOrNullResult();
 
-        if ($like === null) {
+        if (null === $like) {
             return;
         }
 

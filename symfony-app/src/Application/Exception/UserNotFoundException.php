@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Exception;
 
-use RuntimeException;
-
-final class UserNotFoundException extends RuntimeException
+final class UserNotFoundException extends \RuntimeException
 {
     public function __construct()
     {

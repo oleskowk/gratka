@@ -56,6 +56,7 @@ class User
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
         return $this;
     }
 
@@ -67,6 +68,7 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -78,6 +80,7 @@ class User
     public function setName(?string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -89,6 +92,7 @@ class User
     public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
+
         return $this;
     }
 
@@ -100,6 +104,7 @@ class User
     public function setAge(?int $age): self
     {
         $this->age = $age;
+
         return $this;
     }
 
@@ -111,6 +116,7 @@ class User
     public function setBio(?string $bio): self
     {
         $this->bio = $bio;
+
         return $this;
     }
 
@@ -121,7 +127,7 @@ class User
 
     public function addPhoto(Photo $photo): self
     {
-        if (!$this->photos->contains($photo)) {
+        if (! $this->photos->contains($photo)) {
             $this->photos->add($photo);
             $photo->setUser($this);
         }

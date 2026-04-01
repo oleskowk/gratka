@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Application\Command;
 
-use Psr\Log\LoggerInterface;
 use App\Domain\Port\LikeRepositoryInterface;
 use App\Domain\Port\PhotoFindRepositoryInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ToggleLikeCommandHandler
@@ -27,8 +27,9 @@ final class ToggleLikeCommandHandler
 
         $photo = $this->photoRepository->findById($command->photoId);
 
-        if ($photo === null) {
+        if (null === $photo) {
             $this->logger->warning('Photo not found during toggle like', ['photoId' => $command->photoId]);
+
             throw new NotFoundHttpException('Photo not found');
         }
 
@@ -47,4 +48,3 @@ final class ToggleLikeCommandHandler
         }
     }
 }
-
