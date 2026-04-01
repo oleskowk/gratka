@@ -17,29 +17,37 @@ final class DoctrineLikeRepository implements LikeRepositoryInterface
     ) {
     }
 
-    public function like(User $user, Photo $photo): void
+    public function like(int $userId, int $photoId): void
     {
+        $user = $this->entityManager->getReference(User::class, $userId);
+        $photo = $this->entityManager->getReference(Photo::class, $photoId);
+
         $like = new Like();
         $like->setUser($user);
         $like->setPhoto($photo);
 
         $this->entityManager->persist($like);
 
-        $photo->setLikeCounter($photo->getLikeCounter() + 1);
-        $this->entityManager->persist($photo);
+        $this->entityManager->createQueryBuilder()
+            ->update(Photo::class, 'p')
+            ->set('p.likeCounter', 'p.likeCounter + 1')
+            ->where('p.id = :photoId')
+            ->setParameter('photoId', $photoId)
+            ->getQuery()
+            ->execute();
 
         $this->entityManager->flush();
     }
 
-    public function unlike(User $user, Photo $photo): void
+    public function unlike(int $userId, int $photoId): void
     {
         $like = $this->entityManager->createQueryBuilder()
             ->select('l')
             ->from(Like::class, 'l')
-            ->where('l.user = :user')
-            ->andWhere('l.photo = :photo')
-            ->setParameter('user', $user)
-            ->setParameter('photo', $photo)
+            ->where('l.user = :userId')
+            ->andWhere('l.photo = :photoId')
+            ->setParameter('userId', $userId)
+            ->setParameter('photoId', $photoId)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
@@ -50,8 +58,13 @@ final class DoctrineLikeRepository implements LikeRepositoryInterface
 
         $this->entityManager->remove($like);
 
-        $photo->setLikeCounter($photo->getLikeCounter() - 1);
-        $this->entityManager->persist($photo);
+        $this->entityManager->createQueryBuilder()
+            ->update(Photo::class, 'p')
+            ->set('p.likeCounter', 'p.likeCounter - 1')
+            ->where('p.id = :photoId')
+            ->setParameter('photoId', $photoId)
+            ->getQuery()
+            ->execute();
 
         $this->entityManager->flush();
     }

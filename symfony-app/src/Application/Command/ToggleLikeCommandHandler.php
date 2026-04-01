@@ -6,13 +6,11 @@ namespace App\Application\Command;
 
 use App\Domain\Port\LikeRepositoryInterface;
 use App\Domain\Port\PhotoFindRepositoryInterface;
-use App\Domain\Port\UserReadRepositoryInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ToggleLikeCommandHandler
 {
     public function __construct(
-        private UserReadRepositoryInterface $userRepository,
         private PhotoFindRepositoryInterface $photoRepository,
         private LikeRepositoryInterface $likeRepository,
     ) {
@@ -20,7 +18,6 @@ final class ToggleLikeCommandHandler
 
     public function __invoke(ToggleLikeCommand $command): void
     {
-        $user = $this->userRepository->findById($command->userId);
         $photo = $this->photoRepository->findById($command->photoId);
 
         if ($photo === null) {
@@ -28,9 +25,9 @@ final class ToggleLikeCommandHandler
         }
 
         if ($this->likeRepository->hasUserLikedPhoto($command->userId, $command->photoId)) {
-            $this->likeRepository->unlike($user, $photo);
+            $this->likeRepository->unlike($command->userId, $command->photoId);
         } else {
-            $this->likeRepository->like($user, $photo);
+            $this->likeRepository->like($command->userId, $command->photoId);
         }
     }
 }
