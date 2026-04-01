@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence;
 
-use App\Domain\Port\LikeCommandRepositoryInterface;
+use App\Domain\Port\LikeRepositoryInterface;
 use App\Domain\Model\Photo;
 use App\Domain\Model\User;
 use App\Domain\Model\Like;
 use Doctrine\ORM\EntityManagerInterface;
 
-final class DoctrineLikeCommandRepository implements LikeCommandRepositoryInterface
+final class DoctrineLikeRepository implements LikeRepositoryInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -54,5 +54,20 @@ final class DoctrineLikeCommandRepository implements LikeCommandRepositoryInterf
         $this->entityManager->persist($photo);
 
         $this->entityManager->flush();
+    }
+
+    public function hasUserLikedPhoto(int $userId, int $photoId): bool
+    {
+        $count = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(l.id)')
+            ->from(Like::class, 'l')
+            ->where('l.user = :userId')
+            ->andWhere('l.photo = :photoId')
+            ->setParameter('userId', $userId)
+            ->setParameter('photoId', $photoId)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (int) $count > 0;
     }
 }

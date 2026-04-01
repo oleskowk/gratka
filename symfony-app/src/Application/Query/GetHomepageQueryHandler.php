@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Query;
 
-use App\Domain\Port\LikeReadRepositoryInterface;
+use App\Domain\Port\LikeRepositoryInterface;
 use App\Domain\Port\PhotoReadRepositoryInterface;
 use App\Domain\Port\UserReadRepositoryInterface;
 
@@ -12,7 +12,7 @@ final class GetHomepageQueryHandler
 {
     public function __construct(
         private PhotoReadRepositoryInterface $photoReadRepository,
-        private LikeReadRepositoryInterface $likeReadRepository,
+        private LikeRepositoryInterface $likeRepository,
         private UserReadRepositoryInterface $userReadRepository,
     ) {
     }
@@ -29,7 +29,7 @@ final class GetHomepageQueryHandler
 
             if ($currentUser !== null) {
                 foreach ($photos as $photo) {
-                    $userLikes[$photo->getId()] = $this->likeReadRepository->hasUserLikedPhoto(
+                    $userLikes[$photo->getId()] = $this->likeRepository->hasUserLikedPhoto(
                         $query->currentUserId,
                         $photo->getId(),
                     );

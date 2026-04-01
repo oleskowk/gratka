@@ -9,8 +9,7 @@ services:
             - '../src/Kernel.php'
 
     App\Domain\Port\PhotoReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoRepository'
-    App\Domain\Port\LikeReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineLikeReadRepository'
+    App\Domain\Port\LikeRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineLikeRepository'
     App\Domain\Port\UserReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineUserReadRepository'
     App\Domain\Port\PhotoFindRepositoryInterface: '@App\Infrastructure\Persistence\DoctrinePhotoRepository'
-    App\Domain\Port\LikeCommandRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineLikeCommandRepository'
     App\Domain\Port\AuthTokenReadRepositoryInterface: '@App\Infrastructure\Persistence\DoctrineAuthTokenReadRepository'
