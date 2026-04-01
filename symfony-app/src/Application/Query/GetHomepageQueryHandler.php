@@ -28,11 +28,11 @@ final class GetHomepageQueryHandler
             $currentUser = $this->userReadRepository->findById($query->currentUserId);
 
             if ($currentUser !== null) {
+                $likedPhotoIds = $this->likeRepository->getLikedPhotoIdsForUser($query->currentUserId);
+                $likedPhotoIdsSet = array_flip($likedPhotoIds);
+
                 foreach ($photos as $photo) {
-                    $userLikes[$photo->getId()] = $this->likeRepository->hasUserLikedPhoto(
-                        $query->currentUserId,
-                        $photo->getId(),
-                    );
+                    $userLikes[$photo->getId()] = isset($likedPhotoIdsSet[$photo->getId()]);
                 }
             }
         }

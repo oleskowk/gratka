@@ -83,4 +83,18 @@ final class DoctrineLikeRepository implements LikeRepositoryInterface
 
         return (int) $count > 0;
     }
+
+    public function getLikedPhotoIdsForUser(int $userId): array
+    {
+        $result = $this->entityManager->createQueryBuilder()
+            ->select('p.id')
+            ->from(Like::class, 'l')
+            ->join('l.photo', 'p')
+            ->where('l.user = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+
+        return array_column($result, 'id');
+    }
 }

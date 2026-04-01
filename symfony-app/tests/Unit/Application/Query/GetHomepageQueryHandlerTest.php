@@ -57,11 +57,9 @@ final class GetHomepageQueryHandlerTest extends TestCase
         $this->photoReadRepository->method('findAllWithUsers')->willReturn($photos);
         $this->userReadRepository->method('findById')->with(1)->willReturn($user);
 
-        $this->likeRepository->method('hasUserLikedPhoto')
-            ->willReturnMap([
-                [1, 101, true],
-                [1, 102, false],
-            ]);
+        $this->likeRepository->method('getLikedPhotoIdsForUser')
+            ->with(1)
+            ->willReturn([101]);
 
         $view = ($this->handler)(new GetHomepageQuery(currentUserId: 1));
 

@@ -16,3 +16,4 @@ Zaczynam od aplikacji symfony zgodnie z instrukcjami.
 - GET /photo/{id}/like zmienia stan, więc powinno być POST. Warto też zabezpieczyć się przed CSFR - token?
 - Gdyby aplikacja rosła, warto by się pochylić nad DDD i wydzielić bounded contexty. Warto też rozważyć użycie Messengera jako szyny zdarzeń/komend.
 - Aplikacja symfony-app wygląda na aplikację kliencką, jednak nie posiada standardowego systemu użytkowników, sam użytkownik nie posiada nawet hasła. Nietypowy wybór. Warto by się zastanowić czy to dobre podejście i rozważyć użycie symfony security do zarządzania autentuykacją/autoryzacją.
+- [Optymalizacja] Pobierając zdjęcia na stronę główną, pobieraliśmy też informację o tym czy zdjęcie zostalo polubione. Dla każdego zdjecia, osobne zapytanie. Zmieniam to i pobieram listę polubionych wcześniej - to redukuje listę zapytań.

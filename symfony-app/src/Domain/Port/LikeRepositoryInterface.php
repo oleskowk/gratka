@@ -14,4 +14,9 @@ interface LikeRepositoryInterface
     public function unlike(int $userId, int $photoId): void;
 
     public function hasUserLikedPhoto(int $userId, int $photoId): bool;
+
+    /**
+     * @return int[]
+     */
+    public function getLikedPhotoIdsForUser(int $userId): array;
 }
