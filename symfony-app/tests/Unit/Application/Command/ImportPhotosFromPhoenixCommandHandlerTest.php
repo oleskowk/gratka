@@ -15,6 +15,7 @@ use App\Domain\Port\PhotoFindRepositoryInterface;
 use App\Domain\Port\PhotoSaveRepositoryInterface;
 use App\Domain\Port\UserReadRepositoryInterface;
 use App\Infrastructure\ExternalApi\Dto\PhoenixPhotoDto;
+use App\Infrastructure\Security\EncryptionServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -24,6 +25,7 @@ final class ImportPhotosFromPhoenixCommandHandlerTest extends TestCase
     private PhoenixApiClientInterface $phoenixApiClient;
     private PhotoFindRepositoryInterface $photoFindRepository;
     private PhotoSaveRepositoryInterface $photoSaveRepository;
+    private EncryptionServiceInterface $encryptionService;
     private LoggerInterface $logger;
     private ImportPhotosFromPhoenixCommandHandler $handler;
 
@@ -33,6 +35,7 @@ final class ImportPhotosFromPhoenixCommandHandlerTest extends TestCase
         $this->phoenixApiClient = $this->createMock(PhoenixApiClientInterface::class);
         $this->photoFindRepository = $this->createMock(PhotoFindRepositoryInterface::class);
         $this->photoSaveRepository = $this->createMock(PhotoSaveRepositoryInterface::class);
+        $this->encryptionService = $this->createMock(EncryptionServiceInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->handler = new ImportPhotosFromPhoenixCommandHandler(
@@ -40,6 +43,7 @@ final class ImportPhotosFromPhoenixCommandHandlerTest extends TestCase
             $this->userRepository,
             $this->photoFindRepository,
             $this->photoSaveRepository,
+            $this->encryptionService,
             $this->logger
         );
     }
@@ -67,8 +71,10 @@ final class ImportPhotosFromPhoenixCommandHandlerTest extends TestCase
     public function testInvokeSuccessfulImport(): void
     {
         $user = $this->createMock(User::class);
-        $user->method('getPhoenixApiToken')->willReturn('valid-token');
+        $user->method('getPhoenixApiToken')->willReturn('encrypted-token');
         $this->userRepository->method('findById')->willReturn($user);
+
+        $this->encryptionService->method('decrypt')->with('encrypted-token')->willReturn('valid-token');
 
         $dtos = [
             new PhoenixPhotoDto('ext-1', 'url1'),

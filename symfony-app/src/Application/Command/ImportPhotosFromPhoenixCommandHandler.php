@@ -11,6 +11,7 @@ use App\Domain\Port\PhoenixApiClientInterface;
 use App\Domain\Port\PhotoFindRepositoryInterface;
 use App\Domain\Port\PhotoSaveRepositoryInterface;
 use App\Domain\Port\UserReadRepositoryInterface;
+use App\Infrastructure\Security\EncryptionServiceInterface;
 use Psr\Log\LoggerInterface;
 
 final class ImportPhotosFromPhoenixCommandHandler
@@ -20,6 +21,7 @@ final class ImportPhotosFromPhoenixCommandHandler
         private UserReadRepositoryInterface $userRepository,
         private PhotoFindRepositoryInterface $photoFindRepository,
         private PhotoSaveRepositoryInterface $photoSaveRepository,
+        private EncryptionServiceInterface $encryptionService,
         private LoggerInterface $logger,
     ) {
     }
@@ -35,11 +37,22 @@ final class ImportPhotosFromPhoenixCommandHandler
             throw new UserNotFoundException();
         }
 
-        $token = $user->getPhoenixApiToken();
-        if (null === $token) {
+        $encryptedToken = $user->getPhoenixApiToken();
+        if (null === $encryptedToken) {
             $this->logger->warning('No Phoenix API token saved for user, cannot import photos', ['userId' => $command->userId]);
 
             throw new PhoenixTokenMissingException($command->userId);
+        }
+
+        try {
+            $token = $this->encryptionService->decrypt($encryptedToken);
+        } catch (\Exception $e) {
+            $this->logger->error('Failed to decrypt Phoenix API token', [
+                'userId' => $command->userId,
+                'message' => $e->getMessage(),
+            ]);
+
+            throw $e;
         }
 
         $externalPhotos = $this->phoenixApiClient->fetchPhotos($token);

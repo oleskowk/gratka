@@ -9,6 +9,7 @@ use App\Domain\Model\Photo;
 use App\Domain\Model\User;
 use App\Infrastructure\ExternalApi\Dto\PhoenixPhotoDto;
 use App\Infrastructure\ExternalApi\Mock\PhoenixApiMock;
+use App\Infrastructure\Security\EncryptionService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -172,7 +173,9 @@ class PhotoControllerTest extends WebTestCase
         // Refresh user from DB
         $this->entityManager->clear();
         $user = $this->entityManager->find(User::class, $user->getId());
-        $this->assertSame('new-phoenix-token-123', $user->getPhoenixApiToken());
+
+        $encryptionService = static::getContainer()->get(EncryptionService::class);
+        $this->assertSame('new-phoenix-token-123', $encryptionService->decrypt($user->getPhoenixApiToken()));
     }
 
     #[Test]

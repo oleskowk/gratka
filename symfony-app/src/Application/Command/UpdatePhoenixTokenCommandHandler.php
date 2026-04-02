@@ -7,6 +7,7 @@ namespace App\Application\Command;
 use App\Application\Exception\UserNotFoundException;
 use App\Domain\Port\UserReadRepositoryInterface;
 use App\Domain\Port\UserSaveRepositoryInterface;
+use App\Infrastructure\Security\EncryptionServiceInterface;
 use Psr\Log\LoggerInterface;
 
 final class UpdatePhoenixTokenCommandHandler
@@ -14,6 +15,7 @@ final class UpdatePhoenixTokenCommandHandler
     public function __construct(
         private UserReadRepositoryInterface $userRepository,
         private UserSaveRepositoryInterface $userSaveRepository,
+        private EncryptionServiceInterface $encryptionService,
         private LoggerInterface $logger,
     ) {
     }
@@ -29,11 +31,12 @@ final class UpdatePhoenixTokenCommandHandler
             throw new UserNotFoundException();
         }
 
-        $user->setPhoenixApiToken($command->token);
+        $encryptedToken = $this->encryptionService->encrypt($command->token);
+        $user->setPhoenixApiToken($encryptedToken);
 
         $this->userSaveRepository->save($user);
         $this->userSaveRepository->flush();
 
-        $this->logger->info('Phoenix API token updated successfully', ['userId' => $command->userId]);
+        $this->logger->info('Phoenix API token updated and encrypted successfully', ['userId' => $command->userId]);
     }
 }

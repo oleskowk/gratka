@@ -12,10 +12,26 @@ Ten projekt składa się z dwóch oddzielnych aplikacji z własnymi bazami danyc
 
 ## Szybki start
 
-1. Skonfiguruj środowisko (skopiuj szablon, jeśli jeszcze go nie masz):
+1. Skonfiguruj środowisko (skopiuj szablon i wygeneruj klucze):
    ```bash
    cp .env.dist .env
    ```
+
+### Konfiguracja klucza szyfrującego
+
+W głównym pliku `.env` musisz zdefiniować zmienną `SYMFONY_PHOENIX_ENCRYPTION_KEY`. Klucz ten musi mieć dokładnie **32 bajty** (po odkodowaniu z base64).
+
+Aby wygenerować nowy, bezpieczny klucz, użyj następującej komendy:
+
+```bash
+docker-compose exec symfony php -r "echo base64_encode(random_bytes(32)) . PHP_EOL;"
+```
+
+Następnie skopiuj wygenerowany ciąg i wklej go do pliku `.env`:
+
+```env
+SYMFONY_PHOENIX_ENCRYPTION_KEY=TwojWygenerowanyKlucz...
+```
 
 2. Uruchom kontenery i zainicjuj bazy danych:
    ```bash
