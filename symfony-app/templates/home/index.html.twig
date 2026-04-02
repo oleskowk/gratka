@@ -351,6 +351,13 @@
                                     <strong>Camera:</strong> {{ photo.camera }}
                                 </div>
                             {% endif %}
+                            
+                            {% if photo.takenAt %}
+                                <div class="photo-meta-item">
+                                    <span>📅</span>
+                                    <strong>Date:</strong> {{ photo.takenAt|date('Y-m-d H:i') }}
+                                </div>
+                            {% endif %}
                         </div>
                         
                         <div class="author">
