@@ -23,3 +23,5 @@ Zaczynam od aplikacji symfony zgodnie z instrukcjami.
 - Dobrze by było wyczyścić istniejące migracje, poprawić mapowanie ORM, oraz wygenerować nową "bazową" migrację - inaczej migrations:diff będzie generować niepotrzebne zmiany.
 - Docker prod nie powinien być serwowany przez deweloperskie narzędzie php. Standardem jest php-fpm + nginx.
 - Dodaję szyfrowanie klucza dla phoenix api, by zwiększyć bezpieczeństwo. W tym samym czasie dodaję komendę która umożliwi migrację niezaszyfrowanych kluczy, do zaszyfrowanych.
+- Użyłem testów funkcjonalnych jako podstawy do refaktoryzacji i prostego sprawdzenia podstawowej funkcjonalności. Testy jednostkowe powinny pilnować poprawości logiki biznesowej. Warto by było też z pewnością pomyśleć o testach e2e dla całego systemu. Do testów (szczególnie jednostkowych) warto by użyć narzędzia pokroju Infectio(testy mutacyjne).
+- Z agentem AI pracuję na podobnej zasadzie do pair programmingu, z tą różnicą, że to ja podejmuję ostateczne decyzje i weryfikuję jego pracę. Agent produkuje kod znacznie szybciej od człowieka, ja widzę rzeczy z szerszej perspektywy którą nie zawsze on dostrzega.
