@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Query;
 
+use App\Domain\Model\PhotoFilters;
 use App\Domain\Port\LikeRepositoryInterface;
 use App\Domain\Port\PhotoReadRepositoryInterface;
 use App\Domain\Port\UserReadRepositoryInterface;
@@ -23,7 +24,13 @@ final class GetHomepageQueryHandler
     {
         $this->logger->debug('Fetching homepage data', ['userId' => $query->currentUserId]);
 
-        $photos = $this->photoReadRepository->findAllWithUsers();
+        $photos = $this->photoReadRepository->findAllWithUsers(new PhotoFilters(
+            location: $query->location,
+            camera: $query->camera,
+            description: $query->description,
+            takenAt: $query->takenAt,
+            username: $query->username,
+        ));
 
         $this->logger->debug('Found photos', ['count' => count($photos)]);
 

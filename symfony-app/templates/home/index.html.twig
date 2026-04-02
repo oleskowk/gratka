@@ -187,6 +187,91 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.2);
             background: #f8f9fa;
         }
+
+        .filter-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            color: #ccc;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: white;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-filter {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-filter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-reset {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-reset:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
     </style>
 {% endblock %}
 
@@ -200,6 +285,35 @@
             <a href="{{ path('profile') }}" class="btn-profile">View My Profile</a>
         </div>
     {% endif %}
+
+    <div class="filter-panel">
+        <form action="{{ path('home') }}" method="get" class="filter-form">
+            <div class="filter-group">
+                <label for="location">📍 Location</label>
+                <input type="text" id="location" name="location" value="{{ app.request.query.get('location') }}" placeholder="Search by location...">
+            </div>
+            <div class="filter-group">
+                <label for="camera">📷 Camera</label>
+                <input type="text" id="camera" name="camera" value="{{ app.request.query.get('camera') }}" placeholder="Search by camera...">
+            </div>
+            <div class="filter-group">
+                <label for="description">📝 Description</label>
+                <input type="text" id="description" name="description" value="{{ app.request.query.get('description') }}" placeholder="Search in description...">
+            </div>
+            <div class="filter-group">
+                <label for="date">📅 Date</label>
+                <input type="date" id="date" name="date" value="{{ app.request.query.get('date') }}">
+            </div>
+            <div class="filter-group">
+                <label for="username">👤 User</label>
+                <input type="text" id="username" name="username" value="{{ app.request.query.get('username') }}" placeholder="Search by username...">
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn-filter">Filter</button>
+                <a href="{{ path('home') }}" class="btn-reset">Reset</a>
+            </div>
+        </form>
+    </div>
     {% if photos|length > 0 %}
         <div class="photo-grid">
             {% for photo in photos %}

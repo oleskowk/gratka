@@ -29,7 +29,14 @@ class HomeController extends AbstractController
         $this->logger->debug('Home page requested', ['userId' => $userId]);
 
         $view = ($this->queryHandler)(
-            new GetHomepageQuery(currentUserId: $userId),
+            new GetHomepageQuery(
+                currentUserId: $userId,
+                location: $request->query->get('location'),
+                camera: $request->query->get('camera'),
+                description: $request->query->get('description'),
+                takenAt: $request->query->get('date'),
+                username: $request->query->get('username'),
+            ),
         );
 
         return $this->render('home/index.html.twig', [

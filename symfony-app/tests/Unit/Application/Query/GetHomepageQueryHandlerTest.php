@@ -7,6 +7,7 @@ namespace App\Tests\Unit\Application\Query;
 use App\Application\Query\GetHomepageQuery;
 use App\Application\Query\GetHomepageQueryHandler;
 use App\Domain\Model\Photo;
+use App\Domain\Model\PhotoFilters;
 use App\Domain\Model\User;
 use App\Domain\Port\LikeRepositoryInterface;
 use App\Domain\Port\PhotoReadRepositoryInterface;
@@ -37,7 +38,9 @@ final class GetHomepageQueryHandlerTest extends TestCase
     public function testItReturnsHomepageWithoutUserLikes(): void
     {
         $photos = [$this->createMock(Photo::class)];
-        $this->photoReadRepository->method('findAllWithUsers')->willReturn($photos);
+        $this->photoReadRepository->method('findAllWithUsers')
+            ->with($this->isInstanceOf(PhotoFilters::class))
+            ->willReturn($photos);
 
         $view = ($this->handler)(new GetHomepageQuery());
 
@@ -56,7 +59,9 @@ final class GetHomepageQueryHandlerTest extends TestCase
 
         $photos = [$photo1, $photo2];
 
-        $this->photoReadRepository->method('findAllWithUsers')->willReturn($photos);
+        $this->photoReadRepository->method('findAllWithUsers')
+            ->with($this->isInstanceOf(PhotoFilters::class))
+            ->willReturn($photos);
         $this->userReadRepository->method('findById')->with(1)->willReturn($user);
 
         $this->likeRepository->method('getLikedPhotoIdsForUser')
@@ -73,7 +78,9 @@ final class GetHomepageQueryHandlerTest extends TestCase
     public function testItHandlesMissingCurrentUserIdGracefully(): void
     {
         $photos = [$this->createMock(Photo::class)];
-        $this->photoReadRepository->method('findAllWithUsers')->willReturn($photos);
+        $this->photoReadRepository->method('findAllWithUsers')
+            ->with($this->isInstanceOf(PhotoFilters::class))
+            ->willReturn($photos);
         $this->userReadRepository->method('findById')->willReturn(null);
 
         $view = ($this->handler)(new GetHomepageQuery(currentUserId: 99));
@@ -81,5 +88,29 @@ final class GetHomepageQueryHandlerTest extends TestCase
         $this->assertSame($photos, $view->photos);
         $this->assertNull($view->currentUser);
         $this->assertEmpty($view->userLikes);
+    }
+
+    public function testItPassesFiltersToRepository(): void
+    {
+        $query = new GetHomepageQuery(
+            location: 'London',
+            camera: 'Sony',
+            description: 'Park',
+            takenAt: '2024-01-01',
+            username: 'user1'
+        );
+
+        $this->photoReadRepository->expects($this->once())
+            ->method('findAllWithUsers')
+            ->with($this->callback(function (PhotoFilters $filters) {
+                return 'London' === $filters->location
+                    && 'Sony' === $filters->camera
+                    && 'Park' === $filters->description
+                    && '2024-01-01' === $filters->takenAt
+                    && 'user1' === $filters->username;
+            }))
+            ->willReturn([]);
+
+        ($this->handler)($query);
     }
 }
