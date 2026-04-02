@@ -4,6 +4,7 @@ defmodule PhoenixApiWeb.PhotoController do
   alias PhoenixApi.Media
 
   plug PhoenixApiWeb.Plugs.Authenticate
+  plug PhoenixApiWeb.Plugs.RateLimit when action in [:index]
 
   def index(conn, _params) do
     current_user = conn.assigns.current_user
